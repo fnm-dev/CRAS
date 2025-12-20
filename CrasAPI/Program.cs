@@ -1,10 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+using CrasAPI.Data;
+using CrasAPI.Repository.Interfaces;
+using CrasAPI.Repository;
+using CrasAPI.Services.Interfaces;
+using CrasAPI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("Default")
+    )
+);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
