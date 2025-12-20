@@ -1,0 +1,6 @@
+@CrasAPI_HostAddress = http://localhost:5277
+
+GET {{CrasAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
