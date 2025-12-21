@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Model\Login.Model.cs" />
-    <Compile Remove="Repository\Interfaces\ILoginRepository.cs" />
-    <Compile Remove="Repository\Interfaces\Interface.cs" />
-    <Compile Remove="Repository\Interfaces\UserRepository.cs" />
-    <Compile Remove="Repository\LoginRepository.cs" />
+    <Compile Remove="Models\Login.Model.cs" />
+    <Compile Remove="Repositories\Interfaces\ILoginRepository.cs" />
+    <Compile Remove="Repositories\Interfaces\Interface.cs" />
+    <Compile Remove="Repositories\Interfaces\UserRepository.cs" />
+    <Compile Remove="Repositories\LoginRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>
