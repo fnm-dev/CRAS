@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CrasAPI.Model
 {
@@ -15,6 +16,7 @@ namespace CrasAPI.Model
         [Required]
         public string Username { get; set; } = null!;
         [Required]
+        [JsonIgnore]
         public string Password { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
