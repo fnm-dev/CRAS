@@ -17,9 +17,9 @@ namespace CrasAPI.Services
             _repository = repository;
         }
 
-        public async Task<LoginResult> AuthenticateAsync(string username, string password)
+        public async Task<LoginResult> AuthenticateAsync(LoginRequestDTO dto)
         {
-            var user = await _repository.GetByUsernameAsync(username);
+            var user = await _repository.GetByUsernameAsync(dto.Username);
 
             if (user == null)
                 return new LoginResult
@@ -28,7 +28,7 @@ namespace CrasAPI.Services
                     Error = LoginError.UserNotFound
                 };
 
-            if (user.Password != password)
+            if (user.Password != dto.Password)
                 return new LoginResult
                 {
                     Success = false,

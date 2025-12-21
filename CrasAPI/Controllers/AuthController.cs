@@ -9,7 +9,7 @@ using static CrasAPI.Services.Results.LoginResult;
 namespace CrasAPI.Controllers
 {
     [ApiController]
-    [Route("/auth")]
+    [Route("auth")]
     public class AuthController : BaseController
     {
         private readonly IAuthService _service;
@@ -20,10 +20,10 @@ namespace CrasAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequestDto dto)
+        public async Task<IActionResult> Login(LoginRequestDTO dto)
         {
             Log(LogEventLevel.Information, "Validating login of user {User}", null, dto.Username);
-            var result = await _service.AuthenticateAsync(dto.Username, dto.Password);
+            var result = await _service.AuthenticateAsync(dto);
 
             if (!result.Success)
             {

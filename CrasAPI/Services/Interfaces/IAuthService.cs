@@ -6,7 +6,7 @@ namespace CrasAPI.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<LoginResult> AuthenticateAsync(string username, string password);
+        Task<LoginResult> AuthenticateAsync(LoginRequestDTO dto);
         Task<RegisterResult> RegisterAsync(RegisterRequestDTO dto);
     }
 }

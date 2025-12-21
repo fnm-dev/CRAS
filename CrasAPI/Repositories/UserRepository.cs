@@ -22,10 +22,21 @@ namespace CrasAPI.Repository
             return user;
         }
 
+        public async Task<User?> GetByIdAsync(int id)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
         public async Task<User?> GetByUsernameAsync(string username)
         {
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == username);
+        }
+
+        public async Task<List<User>> GetListAsync()
+        {
+            return await _context.Users.ToListAsync();
         }
 
         public async Task UpdateLastLoginAsync(User user)
