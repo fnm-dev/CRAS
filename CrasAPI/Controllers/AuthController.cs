@@ -20,7 +20,7 @@ namespace CrasAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequestDTO dto)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO dto, [FromQuery] bool rememberMe = false)
         {
             Log(LogEventLevel.Information, "Validating login of user {User}", null, dto.Username);
             var result = await _service.AuthenticateAsync(dto);
@@ -40,11 +40,9 @@ namespace CrasAPI.Controllers
                 };
             }
 
-            return Ok(new 
-            { 
-                message = "Login successful", 
-                userId = result.User.Id 
-            });
+            var token = _service.GenerateToken(result.User, rememberMe);
+
+            return Ok(new { token });
         }
 
         [HttpPost("register")]

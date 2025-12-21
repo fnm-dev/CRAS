@@ -2,6 +2,7 @@
 using CrasAPI.Common;
 using CrasAPI.Services.Interfaces;
 using static CrasAPI.Services.Results.UserResult;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CrasAPI.Controllers
 {
@@ -16,6 +17,7 @@ namespace CrasAPI.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetList()
         {
@@ -34,6 +36,7 @@ namespace CrasAPI.Controllers
             return Ok(result.Users);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
