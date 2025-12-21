@@ -5,6 +5,7 @@ namespace CrasAPI.Repository.Interfaces
     public interface IUserRepository
     {
         Task<User?> GetByUsernameAsync(string username);
-        Task<User?> AddAsync(string username, string password);
+        Task UpdateLastLoginAsync(User user);
+        Task<User?> AddAsync(User user);
     }
 }

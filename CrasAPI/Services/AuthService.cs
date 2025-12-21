@@ -4,6 +4,7 @@ using CrasAPI.Services.Interfaces;
 using CrasAPI.Services.Results;
 using static CrasAPI.Services.Results.RegisterResult;
 using static CrasAPI.Services.Results.LoginResult;
+using CrasAPI.DTO;
 
 namespace CrasAPI.Services
 {
@@ -34,6 +35,8 @@ namespace CrasAPI.Services
                     Error = LoginError.IncorrectCredentials
                 };
 
+            await _repository.UpdateLastLoginAsync(user);
+
             return new LoginResult
             {
                 Success = true,
@@ -42,9 +45,9 @@ namespace CrasAPI.Services
             };
         }
 
-        public async Task<RegisterResult> RegisterAsync(string username, string password)
+        public async Task<RegisterResult> RegisterAsync(RegisterRequestDTO dto)
         {
-            var existing = await _repository.GetByUsernameAsync(username);
+            var existing = await _repository.GetByUsernameAsync(dto.Username);
             if (existing != null)
                 return new RegisterResult
                 {
@@ -52,14 +55,27 @@ namespace CrasAPI.Services
                     Error = RegisterError.UsernameAlreadyExists
                 };
 
-            if (password.Length < 6)
+            if (dto.Password.Length < 6)
                 return new RegisterResult
                 {
                     Success = false,
                     Error = RegisterError.PasswordTooWeak
                 };
 
-            var user = await _repository.AddAsync(username, password);
+            var user = new User
+            {
+                Username = dto.Username,
+                Password = dto.Password,
+                Name = dto.Name,
+                FullName = dto.FullName,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                LastPasswordUpdateAt = DateTime.UtcNow,
+                IsActive = true,
+                IsBlocked = false
+            };
+
+            user = await _repository.AddAsync(user);
 
             return new RegisterResult
             {

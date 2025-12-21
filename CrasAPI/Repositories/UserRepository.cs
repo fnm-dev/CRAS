@@ -14,14 +14,8 @@ namespace CrasAPI.Repository
             _context = context;
         }
 
-        public async Task<User?> AddAsync(string username, string password)
+        public async Task<User?> AddAsync(User user)
         {
-            var user = new User
-            {
-                Username = username,
-                Password = password
-            };
-
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -32,6 +26,13 @@ namespace CrasAPI.Repository
         {
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == username);
+        }
+
+        public async Task UpdateLastLoginAsync(User user)
+        {
+            user.LastLoginAt = DateTime.UtcNow;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

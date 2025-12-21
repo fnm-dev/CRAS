@@ -50,7 +50,7 @@ namespace CrasAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequestDTO dto)
         {
-            var result = await _service.RegisterAsync(dto.Username, dto.Password);
+            var result = await _service.RegisterAsync(dto);
 
             if (!result.Success)
             {
