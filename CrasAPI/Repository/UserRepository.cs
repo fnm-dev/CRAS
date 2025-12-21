@@ -14,6 +14,20 @@ namespace CrasAPI.Repository
             _context = context;
         }
 
+        public async Task<User?> AddAsync(string username, string password)
+        {
+            var user = new User
+            {
+                Username = username,
+                Password = password
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
+
         public async Task<User?> GetByUsernameAsync(string username)
         {
             return await _context.Users

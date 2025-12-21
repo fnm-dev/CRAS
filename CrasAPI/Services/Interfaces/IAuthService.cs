@@ -1,9 +1,11 @@
 ﻿using CrasAPI.Model;
+using CrasAPI.Services.Results;
 
 namespace CrasAPI.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<User?> AuthenticateAsync(string username, string password);
+        Task<LoginResult> AuthenticateAsync(string username, string password);
+        Task<RegisterResult> RegisterAsync(string username, string password);
     }
 }

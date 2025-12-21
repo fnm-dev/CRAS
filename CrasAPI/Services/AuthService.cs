@@ -1,6 +1,9 @@
 ﻿using CrasAPI.Model;
 using CrasAPI.Repository.Interfaces;
 using CrasAPI.Services.Interfaces;
+using CrasAPI.Services.Results;
+using static CrasAPI.Services.Results.RegisterResult;
+using static CrasAPI.Services.Results.LoginResult;
 
 namespace CrasAPI.Services
 {
@@ -13,17 +16,57 @@ namespace CrasAPI.Services
             _repository = repository;
         }
 
-        public async Task<User?> AuthenticateAsync(string username, string password)
+        public async Task<LoginResult> AuthenticateAsync(string username, string password)
         {
             var user = await _repository.GetByUsernameAsync(username);
 
             if (user == null)
-                return null;
+                return new LoginResult
+                {
+                    Success = false,
+                    Error = LoginError.UserNotFound
+                };
 
             if (user.Password != password)
-                return null;
+                return new LoginResult
+                {
+                    Success = false,
+                    Error = LoginError.IncorrectCredentials
+                };
 
-            return user;
+            return new LoginResult
+            {
+                Success = true,
+                User = user,
+                Error = LoginError.None
+            };
+        }
+
+        public async Task<RegisterResult> RegisterAsync(string username, string password)
+        {
+            var existing = await _repository.GetByUsernameAsync(username);
+            if (existing != null)
+                return new RegisterResult
+                {
+                    Success = false,
+                    Error = RegisterError.UsernameAlreadyExists
+                };
+
+            if (password.Length < 6)
+                return new RegisterResult
+                {
+                    Success = false,
+                    Error = RegisterError.PasswordTooWeak
+                };
+
+            var user = await _repository.AddAsync(username, password);
+
+            return new RegisterResult
+            {
+                Success = true,
+                User = user,
+                Error = RegisterError.None
+            };
         }
     }
 }

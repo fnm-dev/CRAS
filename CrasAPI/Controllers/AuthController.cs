@@ -1,8 +1,10 @@
-﻿using CrasAPI.Common;
+﻿using Microsoft.AspNetCore.Mvc;
+using Serilog.Events;
+using CrasAPI.Common;
 using CrasAPI.DTO;
 using CrasAPI.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Serilog.Events;
+using static CrasAPI.Services.Results.RegisterResult;
+using static CrasAPI.Services.Results.LoginResult;
 
 namespace CrasAPI.Controllers
 {
@@ -21,13 +23,54 @@ namespace CrasAPI.Controllers
         public async Task<IActionResult> Login(LoginRequestDto dto)
         {
             Log(LogEventLevel.Information, "Validating login of user {User}", null, dto.Username);
-            var user = await _service.AuthenticateAsync(dto.Username, dto.Password);
-            if (user == null)
+            var result = await _service.AuthenticateAsync(dto.Username, dto.Password);
+
+            if (!result.Success)
             {
                 Log(LogEventLevel.Warning, "Login failed for user {User}", null, dto.Username);
-                return Unauthorized(new { message = "Invalid username or password" });
+                return result.Error switch
+                {
+                    LoginError.UserNotFound =>
+                        Unauthorized(new { message = "User not found" }),
+
+                    LoginError.IncorrectCredentials =>
+                        Unauthorized(new { message = "Incorrect credentials" }),
+
+                    _ => BadRequest(new { message = "Internal Error" })
+                };
             }
-            return Ok(new { message = "Login successful", userId = user.Id });
+
+            return Ok(new 
+            { 
+                message = "Login successful", 
+                userId = result.User.Id 
+            });
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterRequestDTO dto)
+        {
+            var result = await _service.RegisterAsync(dto.Username, dto.Password);
+
+            if (!result.Success)
+            {
+                return result.Error switch
+                {
+                    RegisterError.UsernameAlreadyExists =>
+                        BadRequest(new { message = "Username already exists" }),
+
+                    RegisterError.PasswordTooWeak =>
+                        BadRequest(new { message = "Password too weak" }),
+
+                    _ => BadRequest(new { message = "Internal Error" })
+                };
+            }
+
+            return Ok(new
+            {
+                message = "Register successful",
+                userId = result.User.Id
+            });
         }
     }
 }
