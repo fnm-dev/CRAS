@@ -1,5 +1,5 @@
 ﻿using CrasAPI.DTO;
-using CrasAPI.Model;
+using CrasAPI.Models;
 using CrasAPI.Repository.Interfaces;
 using CrasAPI.Services.Interfaces;
 using CrasAPI.Services.Results;
@@ -118,7 +118,8 @@ namespace CrasAPI.Services
                 UpdatedAt = DateTime.UtcNow,
                 LastPasswordUpdateAt = DateTime.UtcNow,
                 IsActive = true,
-                IsBlocked = false
+                IsBlocked = false,
+                AccessGroupId = 2 // Default access group
             };
 
             user = await _repository.AddAsync(user);

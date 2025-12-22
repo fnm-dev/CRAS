@@ -1,4 +1,4 @@
-﻿using CrasAPI.Model;
+﻿using CrasAPI.Models;
 using CrasAPI.Repository.Interfaces;
 using CrasAPI.Services.Interfaces;
 using CrasAPI.Services.Results;

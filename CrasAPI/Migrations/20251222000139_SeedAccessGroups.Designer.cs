@@ -3,6 +3,7 @@ using System;
 using CrasAPI.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrasAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251222000139_SeedAccessGroups")]
+    partial class SeedAccessGroups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,79 +25,7 @@ namespace CrasAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CrasAPI.Models.AccessGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("access_group");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Administrator's group",
-                            Name = "Administrator"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Common user's group",
-                            Name = "User"
-                        });
-                });
-
-            modelBuilder.Entity("CrasAPI.Models.AccessGroupPermission", b =>
-                {
-                    b.Property<int>("AccessGroupId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AccessGroupId", "PermissionId");
-
-                    b.HasIndex("PermissionId");
-
-                    b.ToTable("access_group_permission");
-                });
-
-            modelBuilder.Entity("CrasAPI.Models.Permission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("ParentPermissionId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentPermissionId");
-
-                    b.ToTable("permission");
-                });
-
-            modelBuilder.Entity("CrasAPI.Models.User", b =>
+            modelBuilder.Entity("CrasAPI.Model.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,21 +75,89 @@ namespace CrasAPI.Migrations
                     b.HasIndex("AccessGroupId");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("CrasAPI.Models.AccessGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("access_group");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            AccessGroupId = 1,
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FullName = "Administrator",
-                            IsActive = true,
-                            IsBlocked = false,
-                            Name = "Admin",
-                            Password = "$2a$12$Pe/.UaVMhnGgmL8i/6dxJ.nDeuokmeA9aFuvND816gYYw8bFmk2Ee",
-                            UpdatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Username = "admin@admin.com"
+                            Description = "Administrator's group",
+                            Name = "Administrator"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Common user group",
+                            Name = "User"
                         });
+                });
+
+            modelBuilder.Entity("CrasAPI.Models.AccessGroupPermission", b =>
+                {
+                    b.Property<int>("AccessGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AccessGroupId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("access_group_permission");
+                });
+
+            modelBuilder.Entity("CrasAPI.Models.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ParentPermissionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentPermissionId");
+
+                    b.ToTable("permission");
+                });
+
+            modelBuilder.Entity("CrasAPI.Model.User", b =>
+                {
+                    b.HasOne("CrasAPI.Models.AccessGroup", "AccessGroup")
+                        .WithMany()
+                        .HasForeignKey("AccessGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccessGroup");
                 });
 
             modelBuilder.Entity("CrasAPI.Models.AccessGroupPermission", b =>
@@ -187,17 +186,6 @@ namespace CrasAPI.Migrations
                         .HasForeignKey("ParentPermissionId");
 
                     b.Navigation("ParentPermission");
-                });
-
-            modelBuilder.Entity("CrasAPI.Models.User", b =>
-                {
-                    b.HasOne("CrasAPI.Models.AccessGroup", "AccessGroup")
-                        .WithMany()
-                        .HasForeignKey("AccessGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AccessGroup");
                 });
 
             modelBuilder.Entity("CrasAPI.Models.AccessGroup", b =>

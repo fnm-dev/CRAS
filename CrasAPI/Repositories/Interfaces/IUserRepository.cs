@@ -1,4 +1,4 @@
-﻿using CrasAPI.Model;
+﻿using CrasAPI.Models;
 
 namespace CrasAPI.Repository.Interfaces
 {

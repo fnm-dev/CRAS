@@ -1,5 +1,5 @@
-﻿using CrasAPI.Data;
-using CrasAPI.Model;
+﻿using CrasAPI.Infrastructure;
+using CrasAPI.Models;
 using CrasAPI.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,18 +25,23 @@ namespace CrasAPI.Repository
         public async Task<User?> GetByIdAsync(int id)
         {
             return await _context.Users
+                .Include(u => u.AccessGroup)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User?> GetByUsernameAsync(string username)
         {
             return await _context.Users
+                .Include(u => u.AccessGroup)
                 .FirstOrDefaultAsync(u => u.Username == username);
         }
 
         public async Task<List<User>> GetListAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Include(u => u.AccessGroup)
+                .OrderBy(u => u.Id)
+                .ToListAsync();
         }
 
         public async Task UpdateLastLoginAsync(User user)

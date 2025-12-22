@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
-using CrasAPI.Data;
+using CrasAPI.Infrastructure;
 using CrasAPI.Middlewares;
 using CrasAPI.Repository;
 using CrasAPI.Repository.Interfaces;

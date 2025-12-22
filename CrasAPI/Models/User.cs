@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CrasAPI.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace CrasAPI.Model
+namespace CrasAPI.Models
 {
     [Table("users")]
     public class User
@@ -24,5 +25,10 @@ namespace CrasAPI.Model
         public DateTime? LastPasswordUpdateAt { get; set; }
         public bool IsBlocked { get; set; }
         public bool IsActive { get; set; }
+        [Required]
+        [JsonIgnore]
+        public int AccessGroupId { get; set; }
+        [Required]
+        public AccessGroup AccessGroup { get; set; } = null!;
     }
 }
