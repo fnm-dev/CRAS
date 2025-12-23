@@ -55,13 +55,19 @@ namespace CrasAPI.Services
         {
             var now = DateTime.UtcNow;
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
-                new Claim("userId", user.Id.ToString()),
+                new Claim("user_id", user.Id.ToString()),
+                new Claim("group", user.AccessGroup.Name),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
-            }; 
+            };
+
+            foreach (var gp in user.AccessGroup.Permissions)
+            {
+                claims.Add(new Claim("permissions", gp.Permission.Code));
+            }
 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_config["Jwt:Key"]!)

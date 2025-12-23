@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CrasAPI.Models
 {
@@ -12,7 +13,6 @@ namespace CrasAPI.Models
         [Required]
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-
         public ICollection<AccessGroupPermission> Permissions { get; set; }
         = new List<AccessGroupPermission>();
     }

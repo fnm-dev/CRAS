@@ -26,6 +26,8 @@ namespace CrasAPI.Repository
         {
             return await _context.Users
                 .Include(u => u.AccessGroup)
+                .ThenInclude(g => g.Permissions)
+                .ThenInclude(gp => gp.Permission)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
@@ -33,6 +35,8 @@ namespace CrasAPI.Repository
         {
             return await _context.Users
                 .Include(u => u.AccessGroup)
+                .ThenInclude(g => g.Permissions)
+                .ThenInclude(gp => gp.Permission)
                 .FirstOrDefaultAsync(u => u.Username == username);
         }
 
@@ -40,6 +44,8 @@ namespace CrasAPI.Repository
         {
             return await _context.Users
                 .Include(u => u.AccessGroup)
+                .ThenInclude(g => g.Permissions)
+                .ThenInclude(gp => gp.Permission)
                 .OrderBy(u => u.Id)
                 .ToListAsync();
         }
