@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="crasweb.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+</Solution>
