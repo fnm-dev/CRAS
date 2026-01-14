@@ -34,12 +34,14 @@ namespace CrasAPI.Services
                     Error = LoginError.UserNotFound
                 };
 
-            if (user.Password != dto.Password)
+            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
+            {
                 return new LoginResult
                 {
                     Success = false,
                     Error = LoginError.IncorrectCredentials
                 };
+            }
 
             await _repository.UpdateLastLoginAsync(user);
 
