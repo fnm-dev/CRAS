@@ -1,0 +1,32 @@
+import { createContext, useContext, useEffect, useState } from "react"
+
+type Theme = "light" | "dark"
+
+const ThemeContext = createContext({
+    theme: "light" as Theme,
+    toggle: () => { },
+})
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+    const [theme, setTheme] = useState<Theme>(() => {
+        return (localStorage.getItem("theme") as Theme) || "light"
+    })
+
+    useEffect(() => {
+        document.documentElement.classList.remove("light", "dark")
+        document.documentElement.classList.add(theme)
+        localStorage.setItem("theme", theme)
+    }, [theme])
+
+    function toggle() {
+        setTheme((t) => (t === "light" ? "dark" : "light"))
+    }
+
+    return (
+        <ThemeContext.Provider value={{ theme, toggle }}>
+            {children}
+        </ThemeContext.Provider>
+    )
+}
+
+export const useTheme = () => useContext(ThemeContext)

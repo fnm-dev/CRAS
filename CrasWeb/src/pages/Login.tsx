@@ -7,12 +7,19 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
+import { useTheme } from "@/theme/ThemeProvider"
+import { Sun, Moon } from "lucide-react"
+
+import { toast } from "sonner"
+
 export default function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
     const { login } = useAuth()
     const navigate = useNavigate()
+    const { toggle, theme } = useTheme()
+
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -23,7 +30,7 @@ export default function Login() {
             login(token)
             navigate("/")
         } catch (err: any) {
-            setError(err.message ?? "Erro inesperado")
+            toast.error(err.message ?? "Unexpected error")
         }
     }
 
@@ -31,10 +38,17 @@ export default function Login() {
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-background gap-6">
 
             <img
-                src="/logo_solo.png"
+                src={theme === "dark" ? "./white_logo.png" : "./dark_logo.png"}
                 alt="Logo"
-                className="h-16"
+                className="h-36"
             />
+
+            <button
+                onClick={toggle}
+                className="absolute top-6 right-6 p-2 rounded-full border"
+            >
+                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
 
             <Card className="w-full max-w-sm">
                 <CardHeader>
@@ -60,11 +74,23 @@ export default function Login() {
                             required
                         />
 
-                        {error && (
-                            <p className="text-sm text-red-500 text-center">
-                                {error}
-                            </p>
-                        )}
+                        <div className="space-y-3">
+                            <div className="relative flex items-center">
+                                <div className="flex-grow border-t" />
+                                <span className="mx-2 text-xs text-muted-foreground">or</span>
+                                <div className="flex-grow border-t" />
+                            </div>
+
+                            <Button variant="outline" className="w-full flex items-center gap-3">
+                                <img src="/google_logo.svg" className="h-5 w-5" />
+                                Sign in with Google
+                            </Button>
+
+                            <Button variant="outline" className="w-full flex items-center gap-3">
+                                <img src="/github_logo.svg" className="h-5 w-5" />
+                                Sign in with GitHub
+                            </Button>
+                        </div>
 
                         <Button className="w-full" type="submit">
                             Sign in
