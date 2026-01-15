@@ -31,7 +31,7 @@ namespace CrasAPI.Services
                 return new LoginResult
                 {
                     Success = false,
-                    Error = LoginError.UserNotFound
+                    Error = LoginError.IncorrectCredentials
                 };
 
             if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
