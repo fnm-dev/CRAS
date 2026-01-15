@@ -34,6 +34,20 @@ namespace CrasAPI.Services
                     Error = LoginError.IncorrectCredentials
                 };
 
+            if (!user.IsActive)
+                return new LoginResult
+                {
+                    Success = false,
+                    Error = LoginError.UserDeactivated
+                };
+
+            if (user.IsBlocked)
+                return new LoginResult
+                {
+                    Success = false,
+                    Error = LoginError.UserBlocked
+                };
+
             if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
             {
                 return new LoginResult

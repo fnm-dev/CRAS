@@ -7,8 +7,9 @@ namespace CrasAPI.Services.Results
         public enum LoginError
         {
             None,
-            UserNotFound,
-            IncorrectCredentials
+            IncorrectCredentials,
+            UserDeactivated,
+            UserBlocked
         }
 
         public bool Success { get; set; }

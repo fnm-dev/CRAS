@@ -30,8 +30,11 @@ namespace CrasAPI.Controllers
                 Log(LogEventLevel.Warning, "Login failed for user {User}", null, dto.Username);
                 return result.Error switch
                 {
-                    LoginError.UserNotFound =>
-                        Unauthorized(new { message = "User not found" }),
+                    LoginError.UserDeactivated =>
+                        Unauthorized(new { message = "User is deactivated" }),
+
+                    LoginError.UserBlocked =>
+                        Unauthorized(new { message = "User is blocked" }),
 
                     LoginError.IncorrectCredentials =>
                         Unauthorized(new { message = "Incorrect credentials" }),
