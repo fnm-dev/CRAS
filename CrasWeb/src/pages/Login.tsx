@@ -11,10 +11,13 @@ import { useTheme } from "@/theme/ThemeProvider"
 import { Sun, Moon } from "lucide-react"
 
 import { toast } from "sonner"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
 
 export default function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [rememberMe, setRememberMe] = useState(false)
     const [error, setError] = useState("")
     const { login } = useAuth()
     const navigate = useNavigate()
@@ -26,7 +29,7 @@ export default function Login() {
         setError("")
 
         try {
-            const token = await apiLogin(username, password)
+            const token = await apiLogin(username, password, rememberMe)
             login(token)
             navigate("/")
         } catch (err: any) {
@@ -73,6 +76,14 @@ export default function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+
+                        <div className="flex items-center gap-3 ml-2">
+                            <Checkbox id="rememberMe"
+                                checked={rememberMe}
+                                onCheckedChange={(e) => setRememberMe(!!e)}
+                            />
+                            <Label htmlFor="rememberMe">Remember-me?</Label>
+                        </div>
 
                         <div className="space-y-3">
                             <div className="relative flex items-center">
