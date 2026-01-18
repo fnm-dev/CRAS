@@ -134,6 +134,33 @@ export default function Register() {
                             />
                         </div>
 
+                        <div className="space-y-3">
+                            <div className="relative flex items-center">
+                                <div className="flex-grow border-t" />
+                                <span className="mx-2 text-xs text-muted-foreground">or</span>
+                                <div className="flex-grow border-t" />
+                            </div>
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="w-full flex items-center gap-3"
+                            >
+                                <img src="/google_logo.svg" className="h-5 w-5" />
+                                Register with Google
+                            </Button>
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="w-full flex items-center gap-3"
+                            >
+                                <img src="/github_logo.svg" className="h-5 w-5" />
+                                Register with GitHub
+                            </Button>
+                        </div>
+
+
                         <Button className="w-full mt-2" type="submit">
                             Register
                         </Button>

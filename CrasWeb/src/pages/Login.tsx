@@ -106,6 +106,15 @@ export default function Login() {
                         <Button className="w-full" type="submit">
                             Sign in
                         </Button>
+
+                        <Button
+                            type="button"
+                            variant="link"
+                            className="text-sm"
+                            onClick={() => navigate("/register")}
+                        >
+                            Don't have an account? Register
+                        </Button>
                     </form>
                 </CardContent>
             </Card>
