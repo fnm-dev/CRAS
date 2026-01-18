@@ -3,18 +3,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import Forbidden from './pages/Forbidden';
-import { RequireAuth } from './auth/RequireAuth';
+//import { RequireAuth } from './auth/RequireAuth';
 
 export const router = createBrowserRouter([
+    { path: '/', element: <Home /> },
     { path: '/login', element: <Login /> },
     { path: '/register', element: <Register /> },
-    {
-        path: '/',
-        element: (
-            <RequireAuth>
-                <Home />
-            </RequireAuth>
-        ),
-    },
     { path: '/forbidden', element: <Forbidden /> },
 ]);
