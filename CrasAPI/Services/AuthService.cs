@@ -115,7 +115,7 @@ namespace CrasAPI.Services
 
         public async Task<RegisterResult> RegisterAsync(RegisterRequestDTO dto)
         {
-            var existing = await _repository.GetByUsernameAsync(dto.Username);
+            var existing = await _repository.GetByUsernameAsync(dto.Email);
             if (existing != null)
                 return new RegisterResult
                 {
@@ -132,8 +132,8 @@ namespace CrasAPI.Services
 
             var user = new User
             {
-                Username = dto.Username,
-                Password = dto.Password,
+                Username = dto.Email,
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 Name = dto.Name,
                 FullName = dto.FullName,
                 CreatedAt = DateTime.UtcNow,
