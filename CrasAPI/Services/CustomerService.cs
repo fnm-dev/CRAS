@@ -31,6 +31,8 @@ namespace CrasAPI.Services
             {
                 return null;
             }
+
+            return customer;
         }
 
         public Task<List<Customer>> GetListAsync()
