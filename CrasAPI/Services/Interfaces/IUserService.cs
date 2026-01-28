@@ -5,7 +5,7 @@ namespace CrasAPI.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<UserResult> GetListAsync();
-        Task<UserResult> GetByIdAsync(int id);
+        Task<Result<List<User>>> GetListAsync();
+        Task<Result<User>> GetByIdAsync(int id);
     }
 }
